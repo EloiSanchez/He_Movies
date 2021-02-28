@@ -1,15 +1,18 @@
 from os import listdir
 import matplotlib.pyplot as plt
+from matplotlib import RcParams as rc
 from matplotlib.animation import FuncAnimation
 import matplotlib.animation as ani
 import control as ct
 
 
+# Generate filenames to read
 def get_string(jk, j):
     str1 = "den.{}.0.".format(jk)
     num = "0"*(7-len(str(j))) + str(j)
     return str1 + num + ".dat"
 
+# Function to generate each frame
 def animate(t):
     ax.clear()
 
@@ -25,7 +28,7 @@ def animate(t):
     for tick in ax.get_yticklabels():
         tick.set_fontname("Arial")
 
-    ax.set_title("{}".format(ct.graph_title), fontname="Arial", weight="bold", fontsize="16")
+    ax.set_title("{}".format(ct.graph_title), fontname="Arial", weight="bold")
     ax.text(-19.5, 0.038, "{} ps".format(t), c="grey", fontname="Arial")
 
     if ct.is_x:
@@ -45,6 +48,9 @@ def log(s):
 
 
 log("Starting calculation")
+
+# Some standards for plotting
+rc.update({'font.size' : 12})
 
 tall_y = []
 all_y = []
