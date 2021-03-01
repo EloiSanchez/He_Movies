@@ -1,4 +1,5 @@
 from os import listdir
+from os.path import exists
 import matplotlib.pyplot as plt
 from matplotlib import RcParams as rc
 from matplotlib.animation import FuncAnimation
@@ -201,7 +202,18 @@ if ct.showmovie or ct.savemovie:
             out += "Y"
         if ct.is_z:
             out += "Z"
-        animation.save("Resultats/" + pre + out + ".mp4", writer=writer, dpi=ct.res)
+        ani_name = "Resultats/" + pre + out + ".mp4"
+        while exists(ani_name):
+            order = input("The file {} already exists. Replace, Quit or Try again? (R/Q) ".format(ani_name))
+            if order.capitalize().strip() == "Q":
+                print("Exit program\n")
+                quit()
+            elif order.capitalize().strip() == "R":
+                print("Replacing file\n")
+                break
+            print("Trying again\n")
+            
+        animation.save(ani_name, writer=writer, dpi=ct.res)
 
     if ct.showmovie:
         log("Showing animation")
