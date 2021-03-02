@@ -8,21 +8,32 @@ import control as ct
 import numpy as np
 
 
-# Generate filenames to read
-def get_string(jk, j):
-    str1 = "den.{}.0.".format(jk)
-    num = "0"*(7-len(str(j))) + str(j)
-    return str1 + num + ".dat"
+"""
+Movies for the helium density and derivatives.
+
+To do:
+    - Add commandline input to get the interval plot t0 and tf
+    - Add plots for enregy and norm from energy.dat and norma_He.dat
+
+Eloi Sanchez
+2021
+"""
 
 
 # Function to generate each frame
 def animate(t):
+    """
+    Plots each of the animation depending on t
+    """
+    # This block controls the plot of the density
     if ct.is_dens:
         ax1.clear()
 
+        # Y axis of the plot
         ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
         ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch="condensed",
                     fontsize=ct.ax_font_size)
+        # X axis of the plot
         ax1.set_xlim(ct.xrang[0], ct.xrang[1])
         if not ct.is_deriv:
             ax1.set_xlabel(ct.x_title, weight=ct.t_bold, stretch="condensed",
@@ -33,10 +44,8 @@ def animate(t):
         # for tick in ax1.get_yticklabels():
         #     tick.set_fontname("Arial")
 
-        ax1.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
-            stretch="condensed")
-        ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t), c="grey")
 
+        # Plot
         if ct.is_x:
             ax1.plot(tall_x, all_x[t], label="x axis", c="#8ece27", lw=ct.lineweight)
         if ct.is_y:
@@ -44,19 +53,27 @@ def animate(t):
         if ct.is_z:
             ax1.plot(tall_z, all_z[t], label="z axis", c="#ff333a", lw=ct.lineweight)
 
+        # Title, legend and timestamp
+        ax1.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
+            stretch="condensed")
         ax1.legend(frameon=False)
+        ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t), c="grey")
 
+    # This block controls the plot of the derivatives
     if ct.is_deriv:
         ax2.clear()
 
+        # Y axis of the plot
         ax2.set_ylim(ct.yrang_deriv[0], ct.yrang_deriv[1])
         ax2.set_ylabel(ct.y_title_deriv, weight=ct.t_bold, stretch="condensed",
                         fontsize=ct.ax_font_size)
 
+        # X axis of the plot
         ax2.set_xlim(ct.xrang[0], ct.xrang[1])
         ax2.set_xlabel(ct.x_title, weight=ct.t_bold, stretch="condensed",
                         fontsize=ct.ax_font_size)
         
+        # Plot
         if ct.is_x:
             ax2.plot(tall_x, all_x_deriv[t], label="x axis", c="#8ece27", lw=ct.lineweight)
         if ct.is_y:
@@ -64,16 +81,20 @@ def animate(t):
         if ct.is_z:
             ax2.plot(tall_z, all_z_deriv[t], label="z axis", c="#ff333a", lw=ct.lineweight)
 
+        # In case there is no density plot, add the legend, the title and the timestamp here
         if not ct.is_dens:
             ax2.legend(frameon=False)
             ax2.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
-                stretch="condensed")
+                    stretch="condensed")
+            ax2.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t), c="grey")
 
-    # plt.tight_layout()
+    # plt.tight_layout()  # Induces bad formatting int he plots
 
 
-# Makes derivative of a list
 def derivate(lst, h):
+    """
+    Calculates the centered derivative of a list (the f(x) where h=x2-x1)
+    """
     N = len(lst)
     n_lst = lst.copy()
     dv_ll = np.zeros(N)
@@ -86,7 +107,19 @@ def derivate(lst, h):
     return dv_ll.tolist()
 
 
+def get_string(jk, j):
+    """
+    Generate filenames to read
+    """
+    str1 = "den.{}.0.".format(jk)
+    num = "0"*(7-len(str(j))) + str(j)
+    return str1 + num + ".dat"
+
+
 def log(s):
+    """
+    Format prints.
+    """
     print("====" + "="*len(s) + "====")
     print("=== " + s + " ===")
     print("====" + "="*len(s) + "====\n")
@@ -101,6 +134,7 @@ rc.update(
     {'family' : "Arial"},
     )
 
+# Generate standard lists
 tall_x = []
 all_x = []
 all_x_deriv = []
@@ -111,77 +145,85 @@ tall_z = []
 all_z = []
 all_z_deriv = []
 
+# Get the filenames to be read.
 all_files = listdir(ct.folder_name)
 all_files.sort()
 maxfile = all_files[-1]
 maxnum = int(maxfile[-11:-4])
 
 log("Reading files")
-for i in range(1, maxnum+1):
-    f = ct.folder_name + "/" + get_string("XY", i)
-    f = open(f, mode="r")
-    den_y = []
-    den_x = []
-    for line in f:
-        x, y, den = line.split()
-        x = float(x)
-        y = float(y)
-        den = float(den)
+# Block for X and Y axis
+if ct.is_x or ct.is_y:
+    for i in range(1, maxnum+1):
+        f = ct.folder_name + "/" + get_string("XY", i)
+        f = open(f, mode="r")
+        den_y = []
+        den_x = []
+        for line in f:
+            x, y, den = line.split()
+            x = float(x)
+            y = float(y)
+            den = float(den)
 
-        if abs(x) < 0.001:
-            den_y.append(den)
-            if y not in tall_y:
-                tall_y.append(y)
+            if abs(x) < 0.001:
+                den_y.append(den)
+                if y not in tall_y:
+                    tall_y.append(y)
 
-        if abs(y) < 0.001:
-            den_x.append(den)
-            if x not in tall_x:
-                tall_x.append(x)
-    
-    all_y.append(den_y)
-    all_x.append(den_x)
-    if ct.is_deriv:
-        all_y_deriv.append(derivate(den_y, tall_y[1]-tall_y[0]))
-        all_x_deriv.append(derivate(den_x, tall_x[1]-tall_x[0]))
-    f.close()
+            if abs(y) < 0.001:
+                den_x.append(den)
+                if x not in tall_x:
+                    tall_x.append(x)
+        
+        all_y.append(den_y)
+        all_x.append(den_x)
+        if ct.is_deriv:
+            all_y_deriv.append(derivate(den_y, tall_y[1]-tall_y[0]))
+            all_x_deriv.append(derivate(den_x, tall_x[1]-tall_x[0]))
+        f.close()
 
-for i in range(1, maxnum+1):
-    f = ct.folder_name + "/" + get_string("XZ", i)
-    f = open(f, mode="r")
-    den_z = []
-    for line in f:
-        x, z, den = line.split()
-        x = float(x)
-        z = float(z)
-        den = float(den)
+# Block for z axis
+if ct.is_z:
+    for i in range(1, maxnum+1):
+        f = ct.folder_name + "/" + get_string("XZ", i)
+        f = open(f, mode="r")
+        den_z = []
+        for line in f:
+            x, z, den = line.split()
+            x = float(x)
+            z = float(z)
+            den = float(den)
 
-        if abs(x) < 0.001:
-            den_z.append(den)
-            if z not in tall_z:
-                tall_z.append(z)
+            if abs(x) < 0.001:
+                den_z.append(den)
+                if z not in tall_z:
+                    tall_z.append(z)
 
-    all_z.append(den_z)
-    if ct.is_deriv:
-        all_z_deriv.append(derivate(den_z, tall_z[1]-tall_z[0]))
-    f.close()
+        all_z.append(den_z)
+        if ct.is_deriv:
+            all_z_deriv.append(derivate(den_z, tall_z[1]-tall_z[0]))
+        f.close()
 
 if ct.showmovie or ct.savemovie:
     log("Start animation")
     inter = int(1000/ct.fps)
 
     fig = plt.figure()
+    # Plot both density and derivative
     if ct.is_together:
         if not (ct.is_dens and ct.is_deriv):
             log("Error: for double plot, all shoud be True.")
             quit()
-        plt.close()
+        plt.close()  # Because we want to have a figure with another size
         fig = plt.figure(figsize=(6.4, 4.8*1.5))
         ax1 = fig.add_subplot(211)
         ax2 = fig.add_subplot(212)
         pre = "all_"
+    # Plot only density
     elif ct.is_dens and not ct.is_deriv:
         ax1 = fig.add_subplot()
         pre = "dens_"
+    # Plot only derivative
     elif ct.is_deriv and not ct.is_dens:
         ax2 = fig.add_subplot()
         pre = "deriv_"
@@ -189,8 +231,10 @@ if ct.showmovie or ct.savemovie:
         log("Error: For double indpendent plot, run twice.")
         quit()
 
+    # This is the function that creates the animation
     animation = FuncAnimation(fig=fig, func=animate, frames=maxnum, interval=inter)
 
+    # Block for saving the movie in the output file
     if ct.savemovie:
         log("Saving animation")
         Writer = ani.writers['ffmpeg']
@@ -215,7 +259,8 @@ if ct.showmovie or ct.savemovie:
             
         animation.save(ani_name, writer=writer, dpi=ct.res)
 
-    if ct.showmovie:
+    # Block for showing the animation if it has not been saved
+    if ct.showmovie and not ct.savemovie:
         log("Showing animation")
         plt.show()
 
