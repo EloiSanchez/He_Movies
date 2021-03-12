@@ -3,11 +3,11 @@
 
 # File control
 # folder_name = "/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/hcl/rel/trunc_j1_mj0_jmax6/"        # Where the density files are stored.
-folder_name = "carpeta/HCl_jmax5_g96/"
-fileout = "HCl_jmax5_g96_bt"       # Without extension. It will be automatically .mp4
+folder_name = "/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/tcl/rel/trunc_tcl_jmax8/"
+fileout = "TCl_jmax8_incomplete_g96_bt"       # Without extension. It will be automatically .mp4
 
 # Plot settings
-graph_title = r'HCl ($|1,0\rangle$, j$_{max}$=5, $N$=100, g98, bt)' 
+graph_title = r'TCl ($|1,0\rangle$, j$_{max}$=8, $N$=100, g96, bt)' 
 # graph_title = ""
 font_size = 10
 ax_font_size = 12
@@ -32,8 +32,8 @@ is_deriv = True
 is_together = True
 
 # Movie settings
-showmovie = False
-savemovie = True
+showmovie = True 
+savemovie = False
 res = 300                  # Resolution of the movie (in DPI, 600 is standard impression quality)
 bit_rate = 2000             # No se molt be que fa pero 1800 es de l'exemple de matplotlib
 fps = 7                    # Fotograms per second. Higher framerate will make time pass faster.

@@ -145,8 +145,13 @@ tall_z = []
 all_z = []
 all_z_deriv = []
 
-# Get the filenames to be read.
-all_files = listdir(ct.folder_name)
+# Get the filenames to be read from the directory.
+# The files must be parsed to get only the XY and XZ files.
+directory_files = listdir(ct.folder_name)
+all_files = []
+for fil in directory_files:
+    if fil.startswith('den.XY.') or fil.startswith('den.XZ.'):
+        all_files.append(fil)
 all_files.sort()
 maxfile = all_files[-1]
 maxnum = int(maxfile[-11:-4])
