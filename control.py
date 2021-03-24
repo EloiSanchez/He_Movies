@@ -5,6 +5,7 @@
 # folder_name = "/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/hcl/rel/trunc_j1_mj0_jmax6/"        # Where the density files are stored.
 folder_name = "/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/tcl/rel/trunc_tcl_jmax8/"
 fileout = "TCl_jmax8_incomplete_g96_bt"       # Without extension. It will be automatically .mp4
+read_dens = True
 
 # Plot settings
 graph_title = r'TCl ($|1,0\rangle$, j$_{max}$=8, $N$=100, g96, bt)' 
