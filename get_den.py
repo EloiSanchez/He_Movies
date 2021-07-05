@@ -1,10 +1,10 @@
 def get_string(jk, j):
-    """
+    '''
     Generate filenames to read
-    """
-    str1 = "{}.0.".format(jk)
-    num = "0"*(7-len(str(j))) + str(j)
-    return str1 + num + ".dat"
+    '''
+    str1 = '{}.0.'.format(jk)
+    num = '0'*(7-len(str(j))) + str(j)
+    return str1 + num + '.dat'
 
 def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
     import numpy as np
@@ -12,19 +12,19 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
 
     # Primer cal trobar els indexs que s'han generat al directori de resultats
     if is_den:
-        files_X = [get_string("den.XY", s) for s in range(1, int(maxnum + 1))]
-        files_Z = [get_string("den.XZ", s) for s in range(1, int(maxnum + 1))]
+        files_X = [get_string('den.XY', s) for s in range(1, int(maxnum + 1))]
+        files_Z = [get_string('den.XZ', s) for s in range(1, int(maxnum + 1))]
     else:
-        files_Z = ["/" + get_string("tall.z", s) for s in range(1, int(maxnum + 1))]
-        files_Y = ["/" + get_string("tall.y", s) for s in range(1, int(maxnum + 1))]
-        files_X = ["/" + get_string("tall.x", s) for s in range(1, int(maxnum + 1))]
+        files_Z = ['/' + get_string('tall.z', s) for s in range(1, int(maxnum + 1))]
+        files_Y = ['/' + get_string('tall.y', s) for s in range(1, int(maxnum + 1))]
+        files_X = ['/' + get_string('tall.x', s) for s in range(1, int(maxnum + 1))]
     
-    # logging.info("Reading ALL density files for possible storage")
+    # logging.info('Reading ALL density files for possible storage')
 
     grid_x = []  # Construim nomes una grid perque grid_x = grid_y = grid_z
     t = []
     file_ind = 0
-    with open(prefix + files_X[0], "r") as fil:
+    with open(prefix + files_X[0], 'r') as fil:
         lines = fil.readlines()
     
     # Bloc de lectura en cas que fem servir format den.__.dat
@@ -43,7 +43,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
             file_ind += 1
             t.append(file_ind * delta_t * pdenpar)
 
-            with open(prefix + name, "r") as fil:
+            with open(prefix + name, 'r') as fil:
                 lines = fil.readlines()
 
             den_x = [] 
@@ -62,7 +62,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
         print('Getting Z densities')
         all_z = []
         for name in files_Z:
-            with open(prefix + name, "r") as fil:
+            with open(prefix + name, 'r') as fil:
                 lines = fil.readlines()
             den_z = []
             for line in lines:
@@ -86,7 +86,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
             file_ind += 1
             t.append(file_ind * delta_t * pener)
 
-            with open(prefix + name, "r") as fil:
+            with open(prefix + name, 'r') as fil:
                 lines = fil.readlines()
 
             den_x = []
@@ -99,7 +99,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
         print('Getting Y densities')
         all_y = []
         for name in files_Y:
-            with open(prefix + name, "r") as fil:
+            with open(prefix + name, 'r') as fil:
                 lines = fil.readlines()
             den_y = []
             for line in lines:
@@ -110,7 +110,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
         print('Getting Z densities')
         all_z = []
         for name in files_Z:
-            with open(prefix + name, "r") as fil:
+            with open(prefix + name, 'r') as fil:
                 lines = fil.readlines()
             den_z = []
             for line in lines:

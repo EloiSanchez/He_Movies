@@ -9,7 +9,7 @@ import numpy as np
 import get_den as gd
 import sys
 
-"""
+'''
 Movies for the helium density and derivatives.
 
 To do:
@@ -18,14 +18,14 @@ To do:
 
 Eloi Sanchez
 2021
-"""
+'''
 
 
 # Function to generate each frame
 def animate(i):
-    """
+    '''
     Plots each of the animation depending on i
-    """
+    '''
     # Plot
     if ct.is_x:
         plot_x.set_ydata(all_x[i])
@@ -39,21 +39,21 @@ def animate(i):
 
 
 def log(s):
-    """
+    '''
     Format prints.
-    """
-    print("\n====" + "="*len(s) + "====")
-    print("=== " + s + " ===")
-    print("====" + "="*len(s) + "====\n")
+    '''
+    print('\n====' + '='*len(s) + '====')
+    print('=== ' + s + ' ===')
+    print('====' + '='*len(s) + '====\n')
     return
 
 
-log("Starting calculation")
+log('Starting calculation')
 
 # Some standards for plotting
 rc.update(
     {'font.size' : ct.font_size},
-    {'family' : "Arial"},
+    {'family' : 'Arial'},
     )
 
 
@@ -75,45 +75,45 @@ maxfile = all_files[-1]
 maxnum = int(maxfile[-11:-4])
 
 # Get some variables from DFT4He3dt.namelist.read
-with open(ct.folder_name + "/DFT4He3dt.namelist.read", "r") as fil:
+with open(ct.folder_name + '/DFT4He3dt.namelist.read', 'r') as fil:
     lines = fil.readlines()
 
 for line in lines:
-    if line.strip().startswith("DELTAT"):
-        delta_t = float(line.split("=")[1][:-2])
-    elif line.strip().startswith("PTALLS"):
-        ptalls = int(line.split("=")[1][:-2])
-    elif line.strip().startswith("PDENPAR"):
-        pdenpar = int(line.split("=")[1][:-2])
+    if line.strip().startswith('DELTAT'):
+        delta_t = float(line.split('=')[1][:-2])
+    elif line.strip().startswith('PTALLS'):
+        ptalls = int(line.split('=')[1][:-2])
+    elif line.strip().startswith('PDENPAR'):
+        pdenpar = int(line.split('=')[1][:-2])
 
 print('Parameters read from namelist file.')
 print(f'{delta_t = }')
 print(f'{ptalls = }')
 print(f'{pdenpar = }')
 
-log("Reading files")
+log('Reading files')
 t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
 
 if ct.showmovie or ct.savemovie:
-    log("Start animation")
+    log('Start animation')
     inter = int(1000/ct.fps)
 
     fig = plt.figure()
     ax1 = fig.add_subplot()
     
     if ct.is_x:
-        plot_x = ax1.plot(grid_x, all_x[0], label=r"$x$ axis", c="#8ece27", lw=ct.lineweight)
+        plot_x = ax1.plot(grid_x, all_x[0], label=r'$x$ axis', c='#8ece27', lw=ct.lineweight)
     if ct.is_y:
-        plot_y = ax1.plot(grid_x, all_y[0], label=r"$y4 axis", c="#1982c4", lw=ct.lineweight)
+        plot_y = ax1.plot(grid_x, all_y[0], label=r'$y4 axis', c='#1982c4', lw=ct.lineweight)
     if ct.is_z:
-        plot_z = ax1.plot(grid_x, all_z[0], label=r"$z$ axis", c="#ff333a", lw=ct.lineweight)
+        plot_z = ax1.plot(grid_x, all_z[0], label=r'$z$ axis', c='#ff333a', lw=ct.lineweight)
 
 
-    time_stamp = ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t[0]), c="grey")
+    time_stamp = ax1.text(ct.pos_t[0], ct.pos_t[1], '{} ps'.format(t[0]), c='grey')
 
     # Y axis of the plot
     ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
-    ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch="condensed", \
+    ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch='condensed', \
                 fontsize=ct.ax_font_size)
     # X axis of the plot
     ax1.set_xlim(ct.xrang[0], ct.xrang[1])
@@ -123,33 +123,33 @@ if ct.showmovie or ct.savemovie:
 
     # Block for saving the movie in the output file
     if ct.savemovie:
-        log("Saving animation")
+        log('Saving animation')
         Writer = ani.writers['ffmpeg']
         writer = Writer(fps=ct.fps, bitrate=ct.bit_rate)
-        out = ct.fileout + "_"
+        out = ct.fileout + '_'
         if ct.is_x:
-            out += "X"
+            out += 'X'
         if ct.is_y:
-            out += "Y"
+            out += 'Y'
         if ct.is_z:
-            out += "Z"
-        ani_name = "Resultats/movie_" + out + ".mp4"
+            out += 'Z'
+        ani_name = 'Resultats/movie_' + out + '.mp4'
         while exists(ani_name):
-            order = input("The file {} already exists. Replace, Quit or Try again? (R/Q) ".format(ani_name))
-            if order.capitalize().strip() == "Q":
-                print("Exit program\n")
+            order = input('The file {} already exists. Replace, Quit or Try again? (R/Q) '.format(ani_name))
+            if order.capitalize().strip() == 'Q':
+                print('Exit program\n')
                 quit()
-            elif order.capitalize().strip() == "R":
-                print("Replacing file\n")
+            elif order.capitalize().strip() == 'R':
+                print('Replacing file\n')
                 break
-            print("Trying again\n")
+            print('Trying again\n')
             
         animation.save(ani_name, writer=writer, dpi=ct.res, \
             progress_callback = lambda i, n: print(f'Saving frame {i} of {n}', end='\r'))
 
     # Block for showing the animation if it has not been saved
     if ct.showmovie and not ct.savemovie:
-        log("Showing animation")
+        log('Showing animation')
         plt.show()
 
-log("END")
+log('END')
