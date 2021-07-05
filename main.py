@@ -6,9 +6,10 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.animation as ani
 import control as ct
 import numpy as np
+import get_den as gd
+import sys
 
-
-"""
+'''
 Movies for the helium density and derivatives.
 
 To do:
@@ -17,256 +18,140 @@ To do:
 
 Eloi Sanchez
 2021
-"""
+'''
 
 
 # Function to generate each frame
-def animate(t):
-    """
-    Plots each of the animation depending on t
-    """
-    # This block controls the plot of the density
-    if ct.is_dens:
-        ax1.clear()
+def animate(i):
+    '''
+    Plots each of the animation depending on i
+    '''
+    # Plot
+    print(i)
+    if ct.is_x:
+        plot_x.set_ydata(all_x[i])
+    if ct.is_y:
+        plot_y.set_ydata(all_y[i])
+    if ct.is_z:
+        plot_z.set_ydata(all_z[i])
 
-        # Y axis of the plot
-        ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
-        ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch="condensed",
-                    fontsize=ct.ax_font_size)
-        # X axis of the plot
-        ax1.set_xlim(ct.xrang[0], ct.xrang[1])
-        if not ct.is_deriv:
-            ax1.set_xlabel(ct.x_title, weight=ct.t_bold, stretch="condensed",
-                        fontsize=ct.ax_font_size)
-
-        # for tick in ax1.get_xticklabels():
-        #     tick.set_fontname("Arial")
-        # for tick in ax1.get_yticklabels():
-        #     tick.set_fontname("Arial")
-
-
-        # Plot
-        if ct.is_x:
-            ax1.plot(tall_x, all_x[t], label="x axis", c="#8ece27", lw=ct.lineweight)
-        if ct.is_y:
-            ax1.plot(tall_y, all_y[t], label="y axis", c="#1982c4", lw=ct.lineweight)
-        if ct.is_z:
-            ax1.plot(tall_z, all_z[t], label="z axis", c="#ff333a", lw=ct.lineweight)
-
-        # Title, legend and timestamp
-        ax1.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
-            stretch="condensed")
-        ax1.legend(frameon=False)
-        ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t), c="grey")
-
-    # This block controls the plot of the derivatives
-    if ct.is_deriv:
-        ax2.clear()
-
-        # Y axis of the plot
-        ax2.set_ylim(ct.yrang_deriv[0], ct.yrang_deriv[1])
-        ax2.set_ylabel(ct.y_title_deriv, weight=ct.t_bold, stretch="condensed",
-                        fontsize=ct.ax_font_size)
-
-        # X axis of the plot
-        ax2.set_xlim(ct.xrang[0], ct.xrang[1])
-        ax2.set_xlabel(ct.x_title, weight=ct.t_bold, stretch="condensed",
-                        fontsize=ct.ax_font_size)
-        
-        # Plot
-        if ct.is_x:
-            ax2.plot(tall_x, all_x_deriv[t], label="x axis", c="#8ece27", lw=ct.lineweight)
-        if ct.is_y:
-            ax2.plot(tall_y, all_y_deriv[t], label="y axis", c="#1982c4", lw=ct.lineweight)
-        if ct.is_z:
-            ax2.plot(tall_z, all_z_deriv[t], label="z axis", c="#ff333a", lw=ct.lineweight)
-
-        # In case there is no density plot, add the legend, the title and the timestamp here
-        if not ct.is_dens:
-            ax2.legend(frameon=False)
-            ax2.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
-                    stretch="condensed")
-            ax2.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t), c="grey")
-
-    # plt.tight_layout()  # Induces bad formatting int he plots
-
-
-def derivate(lst, h):
-    """
-    Calculates the centered derivative of a list (the f(x) where h=x2-x1)
-    """
-    N = len(lst)
-    n_lst = lst.copy()
-    dv_ll = np.zeros(N)
-    n_lst.append(0)
-    n_lst.insert(0, 0)
-    ll = np.array(n_lst)
-    for i in range(0, N):
-        dv_ll[i] = ll[i+2] - ll[i]
-    dv_ll = dv_ll / (2 * h)
-    return dv_ll.tolist()
-
-
-def get_string(jk, j):
-    """
-    Generate filenames to read
-    """
-    str1 = "den.{}.0.".format(jk)
-    num = "0"*(7-len(str(j))) + str(j)
-    return str1 + num + ".dat"
+    # Title, legend and timestamp
+    time_stamp.set_text('{:.1f} ps'.format(t[i]))
 
 
 def log(s):
-    """
+    '''
     Format prints.
-    """
-    print("====" + "="*len(s) + "====")
-    print("=== " + s + " ===")
-    print("====" + "="*len(s) + "====\n")
+    '''
+    print('\n====' + '='*len(s) + '====')
+    print('=== ' + s + ' ===')
+    print('====' + '='*len(s) + '====\n')
     return
 
 
-log("Starting calculation")
+log('Starting calculation')
 
 # Some standards for plotting
 rc.update(
     {'font.size' : ct.font_size},
-    {'family' : "Arial"},
+    {'family' : 'Arial'},
     )
 
-# Generate standard lists
-tall_x = []
-all_x = []
-all_x_deriv = []
-tall_y = []
-all_y = []
-all_y_deriv = []
-tall_z = []
-all_z = []
-all_z_deriv = []
 
 # Get the filenames to be read from the directory.
 # The files must be parsed to get only the XY and XZ files.
 directory_files = listdir(ct.folder_name)
 all_files = []
-for fil in directory_files:
-    if fil.startswith('den.XY.') or fil.startswith('den.XZ.'):
-        all_files.append(fil)
+
+if ct.is_den:
+    for fil in directory_files:
+        if fil.startswith('den.XY.') or fil.startswith('den.XZ.'):
+            all_files.append(fil)
+else:
+     for fil in directory_files:
+         if fil.startswith('tall.x.') or fil.startswith('tall.y.') or fil.startswith('tall.z'):
+             all_files.append(fil)
 all_files.sort()
 maxfile = all_files[-1]
 maxnum = int(maxfile[-11:-4])
 
-log("Reading files")
-# Block for X and Y axis
-if ct.is_x or ct.is_y:
-    for i in range(1, maxnum+1):
-        f = ct.folder_name + "/" + get_string("XY", i)
-        f = open(f, mode="r")
-        den_y = []
-        den_x = []
-        for line in f:
-            x, y, den = line.split()
-            x = float(x)
-            y = float(y)
-            den = float(den)
+# Get some variables from DFT4He3dt.namelist.read
+with open(ct.folder_name + '/DFT4He3dt.namelist.read', 'r') as fil:
+    lines = fil.readlines()
 
-            if abs(x) < 0.001:
-                den_y.append(den)
-                if y not in tall_y:
-                    tall_y.append(y)
+for line in lines:
+    if line.strip().startswith('DELTAT'):
+        delta_t = float(line.split('=')[1][:-2])
+    elif line.strip().startswith('PTALLS'):
+        ptalls = int(line.split('=')[1][:-2])
+    elif line.strip().startswith('PDENPAR'):
+        pdenpar = int(line.split('=')[1][:-2])
 
-            if abs(y) < 0.001:
-                den_x.append(den)
-                if x not in tall_x:
-                    tall_x.append(x)
-        
-        all_y.append(den_y)
-        all_x.append(den_x)
-        if ct.is_deriv:
-            all_y_deriv.append(derivate(den_y, tall_y[1]-tall_y[0]))
-            all_x_deriv.append(derivate(den_x, tall_x[1]-tall_x[0]))
-        f.close()
+print('Parameters read from namelist file.')
+print(f'{delta_t = }')
+print(f'{ptalls = }')
+print(f'{pdenpar = }')
 
-# Block for z axis
-if ct.is_z:
-    for i in range(1, maxnum+1):
-        f = ct.folder_name + "/" + get_string("XZ", i)
-        f = open(f, mode="r")
-        den_z = []
-        for line in f:
-            x, z, den = line.split()
-            x = float(x)
-            z = float(z)
-            den = float(den)
-
-            if abs(x) < 0.001:
-                den_z.append(den)
-                if z not in tall_z:
-                    tall_z.append(z)
-
-        all_z.append(den_z)
-        if ct.is_deriv:
-            all_z_deriv.append(derivate(den_z, tall_z[1]-tall_z[0]))
-        f.close()
+log('Reading files')
+t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
 
 if ct.showmovie or ct.savemovie:
-    log("Start animation")
+    log('Start animation')
     inter = int(1000/ct.fps)
 
     fig = plt.figure()
-    # Plot both density and derivative
-    if ct.is_together:
-        if not (ct.is_dens and ct.is_deriv):
-            log("Error: for double plot, all shoud be True.")
-            quit()
-        plt.close()  # Because we want to have a figure with another size
-        fig = plt.figure(figsize=(6.4, 4.8*1.5))
-        ax1 = fig.add_subplot(211)
-        ax2 = fig.add_subplot(212)
-        pre = "all_"
-    # Plot only density
-    elif ct.is_dens and not ct.is_deriv:
-        ax1 = fig.add_subplot()
-        pre = "dens_"
-    # Plot only derivative
-    elif ct.is_deriv and not ct.is_dens:
-        ax2 = fig.add_subplot()
-        pre = "deriv_"
-    else:
-        log("Error: For double indpendent plot, run twice.")
-        quit()
+    ax1 = fig.add_subplot()
+    
+    if ct.is_x:
+        plot_x, = ax1.plot(grid_x, all_x[0], label=r'$x$ axis', c='#8ece27', lw=ct.lineweight)
+    if ct.is_y:
+        plot_y, = ax1.plot(grid_x, all_y[0], label=r'$y4 axis', c='#1982c4', lw=ct.lineweight)
+    if ct.is_z:
+        plot_z, = ax1.plot(grid_x, all_z[0], label=r'$z$ axis', c='#ff333a', lw=ct.lineweight)
+
+    time_stamp = ax1.text(ct.pos_t[0], ct.pos_t[1], '{} ps'.format(t[0]), c='grey')
+
+    # Plot formatting
+    ax1.set_title('{}'.format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size, \
+            stretch='condensed')
+    ax1.legend(loc='uppper right', frameon=False)
+    ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
+    ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch='condensed', \
+                fontsize=ct.ax_font_size)
+    ax1.set_xlim(ct.xrang[0], ct.xrang[1])
 
     # This is the function that creates the animation
     animation = FuncAnimation(fig=fig, func=animate, frames=maxnum, interval=inter)
 
     # Block for saving the movie in the output file
     if ct.savemovie:
-        log("Saving animation")
+        log('Saving animation')
         Writer = ani.writers['ffmpeg']
         writer = Writer(fps=ct.fps, bitrate=ct.bit_rate)
-        out = ct.fileout + "_"
+        out = ct.fileout + '_'
         if ct.is_x:
-            out += "X"
+            out += 'X'
         if ct.is_y:
-            out += "Y"
+            out += 'Y'
         if ct.is_z:
-            out += "Z"
-        ani_name = "Resultats/" + pre + out + ".mp4"
+            out += 'Z'
+        ani_name = 'Resultats/movie_' + out + '.mp4'
         while exists(ani_name):
-            order = input("The file {} already exists. Replace, Quit or Try again? (R/Q) ".format(ani_name))
-            if order.capitalize().strip() == "Q":
-                print("Exit program\n")
+            order = input('The file {} already exists. Replace, Quit or Try again? (R/Q) '.format(ani_name))
+            if order.capitalize().strip() == 'Q':
+                print('Exit program\n')
                 quit()
-            elif order.capitalize().strip() == "R":
-                print("Replacing file\n")
+            elif order.capitalize().strip() == 'R':
+                print('Replacing file\n')
                 break
-            print("Trying again\n")
+            print('Trying again\n')
             
-        animation.save(ani_name, writer=writer, dpi=ct.res)
+        animation.save(ani_name, writer=writer, dpi=ct.res, \
+            progress_callback = lambda i, n: print(f'Saving frame {i} of {n}', end='\r', flush=True))
 
     # Block for showing the animation if it has not been saved
     if ct.showmovie and not ct.savemovie:
-        log("Showing animation")
+        log('Showing animation')
         plt.show()
 
-log("END")
+log('END')

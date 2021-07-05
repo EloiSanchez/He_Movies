@@ -2,3 +2,4 @@ carpeta/
 __pycache__/
 venv/
 Resultats/
+*.mp4
