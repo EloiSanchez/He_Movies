@@ -94,9 +94,15 @@ all_z_deriv = []
 # The files must be parsed to get only the XY and XZ files.
 directory_files = listdir(ct.folder_name)
 all_files = []
-for fil in directory_files:
-    if fil.startswith('den.XY.') or fil.startswith('den.XZ.'):
-        all_files.append(fil)
+
+if ct.is_den:
+    for fil in directory_files:
+        if fil.startswith('den.XY.') or fil.startswith('den.XZ.'):
+            all_files.append(fil)
+else:
+     for fil in directory_files:
+         if fil.startswith('tall.x.') or fil.startswith('tall.y.') or fil.startswith('tall.z'):
+             all_files.append(fil)
 all_files.sort()
 maxfile = all_files[-1]
 maxnum = int(maxfile[-11:-4])
@@ -119,7 +125,7 @@ print(f'{ptalls = }')
 print(f'{pdenpar = }')
 log("Reading files")
 t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
-print(f'{t=}')
+print(f'{t = }')
 print(f'{grid_x = }')
 print(f'{all_x = }')
 print(f'{all_y = }')
