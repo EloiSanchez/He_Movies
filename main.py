@@ -113,6 +113,9 @@ for line in lines:
     elif line.strip().startswith("PDENPAR"):
         pdenpar = int(line.split("=")[1][:-2])
 
+print(f'{delta_t=}')
+print(f'{ptalls=}')
+print(f'{pdenpar=}')
 log("Reading files")
 t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
 print(f'{t=}')

@@ -29,11 +29,14 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
     
     # Bloc de lectura en cas que fem servir format den.__.dat
     if is_den:
+        print('Reading from format den.__.dat')
+        print('Constructing grid')
         for line in lines:
             x, y, den = [float(s) for s in line.split()]
             if abs(y) < 0.001 and x not in grid_x:
                 grid_x.append(x)
             
+        print('Getting X and Y densities')
         all_x = []
         for name in files_X:
             file_ind += 1
@@ -54,6 +57,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                     den_x.append(den)
             all_x.append(den_x)
 
+        print('Getting Z densities')
         all_z = []
         for name in files_Z:
             with open(prefix + name, "r") as fil:
@@ -69,10 +73,13 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
 
     # Bloc de lectura en cas que fem servir format tall.__.dat
     else:
+        print('Reading from format tall.__.dat')
+        print('Constructing grid')
         for line in lines:
             x, den = [float(s) for s in line.split()]
             grid_x.append(x)
         
+        print('Getting X densities')
         all_x = []
         for name in files_X:
             file_ind += 1
@@ -88,6 +95,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 den_x.append(den)
             all_x.append(den_x)
             
+        print('Getting Y densities')
         all_y = []
         for name in files_Y:
             with open(prefix + name, "r") as fil:
@@ -98,6 +106,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 den_y.append(den)
             all_y.append(den_y)
 
+        print('Getting Z densities')
         all_z = []
         for name in files_Z:
             with open(prefix + name, "r") as fil:
@@ -108,7 +117,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 den_z.append(den)
             all_z.append(den_z)
         all_x, all_y, all_z = np.array(all_x), np.array(all_y), np.array(all_z)
-
+    print('Finished reading files')
     return t, grid_x, all_x, all_y, all_z
 
     # Ens quedem amb el pic de densitat maxima de la seccio negativa dels eixos
