@@ -125,7 +125,6 @@ if ct.showmovie or ct.savemovie:
 
     # Block for saving the movie in the output file
     if ct.savemovie:
-        log('Saving animation')
         Writer = ani.writers['ffmpeg']
         writer = Writer(fps=ct.fps, bitrate=ct.bit_rate)
         out = ct.fileout + '_'
