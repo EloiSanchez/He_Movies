@@ -27,6 +27,7 @@ def animate(i):
     Plots each of the animation depending on i
     '''
     # Plot
+    print(i)
     if ct.is_x:
         plot_x.set_ydata(all_x[i])
     if ct.is_y:
@@ -102,11 +103,11 @@ if ct.showmovie or ct.savemovie:
     ax1 = fig.add_subplot()
     
     if ct.is_x:
-        plot_x = ax1.plot(grid_x, all_x[0], label=r'$x$ axis', c='#8ece27', lw=ct.lineweight)
+        plot_x, = ax1.plot(grid_x, all_x[0], label=r'$x$ axis', c='#8ece27', lw=ct.lineweight)
     if ct.is_y:
-        plot_y = ax1.plot(grid_x, all_y[0], label=r'$y4 axis', c='#1982c4', lw=ct.lineweight)
+        plot_y, = ax1.plot(grid_x, all_y[0], label=r'$y4 axis', c='#1982c4', lw=ct.lineweight)
     if ct.is_z:
-        plot_z = ax1.plot(grid_x, all_z[0], label=r'$z$ axis', c='#ff333a', lw=ct.lineweight)
+        plot_z, = ax1.plot(grid_x, all_z[0], label=r'$z$ axis', c='#ff333a', lw=ct.lineweight)
 
 
     time_stamp = ax1.text(ct.pos_t[0], ct.pos_t[1], '{} ps'.format(t[0]), c='grey')
