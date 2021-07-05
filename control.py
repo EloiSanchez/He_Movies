@@ -3,12 +3,12 @@
 
 # File control
 # folder_name = '/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/hcl/rel/trunc_j1_mj0_jmax6/'        # Where the density files are stored.
-folder_name = '/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/tcl/rel/trunc_tcl_jmax8/'
-fileout = 'TCl_jmax8_incomplete_g96_bt'       # Without extension. It will be automatically .mp4
-is_den = True  # If True read format den.xy.__.dat, if False read format tall.x.__.dat
+folder_name = '/g5work/g5esanchez/relaxacio_rotacional/hcl_rot/herm_diag/grid_96/hcl/rel/jmax5/ini_j1mj0/'
+fileout = 'test_talls_HCl_j1mj0'       # Without extension. It will be automatically .mp4
+is_den = False  # If True read format den.xy.__.dat, if False read format tall.x.__.dat
 
 # Plot settings
-graph_title = r'TCl ($|1,0\rangle$, j$_{max}$=8, $N$=100, g96, bt)' 
+graph_title = r'HCl ($|1,0\rangle$, $N$=100)' 
 # graph_title = ''
 font_size = 10
 ax_font_size = 12
@@ -30,8 +30,8 @@ is_y = True
 is_z = True
 
 # Movie settings
-showmovie = True 
-savemovie = False
+showmovie = False 
+savemovie = True 
 res = 300                  # Resolution of the movie (in DPI, 600 is standard impression quality)
 bit_rate = 2000             # No se molt be que fa pero 1800 es de l'exemple de matplotlib
-fps = 7                    # Fotograms per second. Higher framerate will make time pass faster.
+fps = 60                    # Fotograms per second. Higher framerate will make time pass faster.

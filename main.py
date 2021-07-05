@@ -36,7 +36,7 @@ def animate(i):
         plot_z.set_ydata(all_z[i])
 
     # Title, legend and timestamp
-    time_stamp.set_text('{} ps'.format(t[i]))
+    time_stamp.set_text('{:.1f} ps'.format(t[i]))
 
 
 def log(s):
@@ -120,7 +120,7 @@ if ct.showmovie or ct.savemovie:
     ax1.set_xlim(ct.xrang[0], ct.xrang[1])
 
     # This is the function that creates the animation
-    animation = FuncAnimation(fig=fig, func=animate, frames=maxnum+1, interval=inter)
+    animation = FuncAnimation(fig=fig, func=animate, frames=maxnum, interval=inter)
 
     # Block for saving the movie in the output file
     if ct.savemovie:
@@ -146,7 +146,7 @@ if ct.showmovie or ct.savemovie:
             print('Trying again\n')
             
         animation.save(ani_name, writer=writer, dpi=ct.res, \
-            progress_callback = lambda i, n: print(f'Saving frame {i} of {n}', end='\r'))
+            progress_callback = lambda i, n: print(f'Saving frame {i} of {n}', end='\r', flush=True))
 
     # Block for showing the animation if it has not been saved
     if ct.showmovie and not ct.savemovie:
