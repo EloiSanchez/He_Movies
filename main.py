@@ -65,7 +65,7 @@ def log(s):
     """
     Format prints.
     """
-    print("====" + "="*len(s) + "====")
+    print("\n====" + "="*len(s) + "====")
     print("=== " + s + " ===")
     print("====" + "="*len(s) + "====\n")
     return
@@ -113,16 +113,17 @@ for line in lines:
     elif line.strip().startswith("PDENPAR"):
         pdenpar = int(line.split("=")[1][:-2])
 
-print(f'{delta_t=}')
-print(f'{ptalls=}')
-print(f'{pdenpar=}')
+print('Parameters read from namelist file.')
+print(f'{delta_t = }')
+print(f'{ptalls = }')
+print(f'{pdenpar = }')
 log("Reading files")
 t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
 print(f'{t=}')
-print(f'{grid_x=}')
-print(f'{all_x=}')
-print(f'{all_y=}')
-print(f'{all_z=}')
+print(f'{grid_x = }')
+print(f'{all_x = }')
+print(f'{all_y = }')
+print(f'{all_z = }')
 quit()
 if ct.showmovie or ct.savemovie:
     log("Start animation")

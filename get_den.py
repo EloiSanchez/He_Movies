@@ -38,6 +38,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
             
         print('Getting X and Y densities')
         all_x = []
+        all_y = []
         for name in files_X:
             file_ind += 1
             t.append(file_ind * delta_t * pdenpar)
@@ -56,6 +57,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 if abs(y) < 0.001:
                     den_x.append(den)
             all_x.append(den_x)
+            all_y.append(den_y)
 
         print('Getting Z densities')
         all_z = []
@@ -69,7 +71,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 if abs(x) < 0.001:
                     den_z.append(den)
             all_z.append(den_z)
-        all_x, all_z = np.array(all_x), np.array(all_z)
+        all_x, all_y, all_z = np.array(all_x), np.array(all_y), np.array(all_z)
 
     # Bloc de lectura en cas que fem servir format tall.__.dat
     else:
