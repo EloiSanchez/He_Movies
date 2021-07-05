@@ -109,14 +109,15 @@ if ct.showmovie or ct.savemovie:
     if ct.is_z:
         plot_z, = ax1.plot(grid_x, all_z[0], label=r'$z$ axis', c='#ff333a', lw=ct.lineweight)
 
-
     time_stamp = ax1.text(ct.pos_t[0], ct.pos_t[1], '{} ps'.format(t[0]), c='grey')
 
-    # Y axis of the plot
+    # Plot formatting
+    ax1.set_title('{}'.format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size, \
+            stretch='condensed')
+    ax1.legend(loc='uppper right', frameon=False)
     ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
     ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch='condensed', \
                 fontsize=ct.ax_font_size)
-    # X axis of the plot
     ax1.set_xlim(ct.xrang[0], ct.xrang[1])
 
     # This is the function that creates the animation

@@ -13,9 +13,9 @@ graph_title = r'HCl ($|1,0\rangle$, $N$=100)'
 font_size = 10
 ax_font_size = 12
 tit_font_size = 12
-pos_t = (-19.5, 0.037)  # Position of the time stamps
+pos_t = (-19.5, 0.065)  # Position of the time stamps
 t_bold = 'normal'   # For bold -> 'bold', for regular -> 'normal'
-lineweight = 1
+lineweight = 1.5
 x_title = r'Axis ($\rm{\AA}$)'
 xrang = (-20, 20)
 
