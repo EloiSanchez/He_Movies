@@ -138,5 +138,5 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
         for i in range(len(t)):
             fil.write("{} {} {}\n".format(t[i], max_x[i], max_y[i], max_z[i]))
         
-    return np.array(max_x), np.array(max_y), np.array(max_z), np.array(t)
+    return t, np.array(max_x), np.array(max_y), np.array(max_z), np.array(t)
 
