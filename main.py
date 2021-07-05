@@ -22,7 +22,7 @@ Eloi Sanchez
 
 
 # Function to generate each frame
-def animate(t):
+def animate(i):
     """
     Plots each of the animation depending on t
     """
@@ -48,17 +48,17 @@ def animate(t):
 
         # Plot
         if ct.is_x:
-            ax1.plot(tall_x, all_x[t], label="x axis", c="#8ece27", lw=ct.lineweight)
+            ax1.plot(grid_x, all_x[i], label="x axis", c="#8ece27", lw=ct.lineweight)
         if ct.is_y:
-            ax1.plot(tall_y, all_y[t], label="y axis", c="#1982c4", lw=ct.lineweight)
+            ax1.plot(grid_x, all_y[i], label="y axis", c="#1982c4", lw=ct.lineweight)
         if ct.is_z:
-            ax1.plot(tall_z, all_z[t], label="z axis", c="#ff333a", lw=ct.lineweight)
+            ax1.plot(grid_x, all_z[i], label="z axis", c="#ff333a", lw=ct.lineweight)
 
         # Title, legend and timestamp
         ax1.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
             stretch="condensed")
         ax1.legend(frameon=False)
-        ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t), c="grey")
+        ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t[i]), c="grey")
 
 
 def log(s):
@@ -79,16 +79,6 @@ rc.update(
     {'family' : "Arial"},
     )
 
-# Generate standard lists
-tall_x = []
-all_x = []
-all_x_deriv = []
-tall_y = []
-all_y = []
-all_y_deriv = []
-tall_z = []
-all_z = []
-all_z_deriv = []
 
 # Get the filenames to be read from the directory.
 # The files must be parsed to get only the XY and XZ files.
@@ -123,14 +113,10 @@ print('Parameters read from namelist file.')
 print(f'{delta_t = }')
 print(f'{ptalls = }')
 print(f'{pdenpar = }')
+
 log("Reading files")
 t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
-print(f'{t = }')
-print(f'{grid_x = }')
-print(f'{all_x = }')
-print(f'{all_y = }')
-print(f'{all_z = }')
-quit()
+
 if ct.showmovie or ct.savemovie:
     log("Start animation")
     inter = int(1000/ct.fps)
@@ -139,7 +125,7 @@ if ct.showmovie or ct.savemovie:
     ax1 = fig.add_subplot()
 
     # This is the function that creates the animation
-    animation = FuncAnimation(fig=fig, func=animate, frames=maxnum, interval=inter)
+    animation = FuncAnimation(fig=fig, func=animate, frames=maxnum+1, interval=inter)
 
     # Block for saving the movie in the output file
     if ct.savemovie:
@@ -164,7 +150,8 @@ if ct.showmovie or ct.savemovie:
                 break
             print("Trying again\n")
             
-        animation.save(ani_name, writer=writer, dpi=ct.res)
+        animation.save(ani_name, writer=writer, dpi=ct.res, \
+            progress_callback = lambda i, n: print(f'Saving frame {i} of {n}', end='\r'))
 
     # Block for showing the animation if it has not been saved
     if ct.showmovie and not ct.savemovie:
