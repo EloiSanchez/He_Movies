@@ -114,8 +114,13 @@ for line in lines:
         pdenpar = int(line.split("=")[1][:-2])
 
 log("Reading files")
-gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
-
+t, grid_x, all_x, all_y, all_z = gd.get_den(ct.folder_name, maxnum, delta_t, pdenpar, ptalls, ct.is_den)
+print(f'{t=}')
+print(f'{grid_x=}')
+print(f'{all_x=}')
+print(f'{all_y=}')
+print(f'{all_z=}')
+quit()
 if ct.showmovie or ct.savemovie:
     log("Start animation")
     inter = int(1000/ct.fps)
