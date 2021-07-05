@@ -71,7 +71,6 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 if abs(x) < 0.001:
                     den_z.append(den)
             all_z.append(den_z)
-        all_x, all_y, all_z = np.array(all_x), np.array(all_y), np.array(all_z)
 
     # Bloc de lectura en cas que fem servir format tall.__.dat
     else:
@@ -118,25 +117,7 @@ def get_den(prefix, maxnum, delta_t, pdenpar, pener, is_den):
                 z, den = [float(s) for s in line.split()]
                 den_z.append(den)
             all_z.append(den_z)
-        all_x, all_y, all_z = np.array(all_x), np.array(all_y), np.array(all_z)
     print('Finished reading files')
-
-    # Ens quedem amb el pic de densitat maxima de la seccio negativa dels eixos
-    max_x = []
-    max_y = []
-    max_z = []
-    N_grid = len(grid_x)
-    max_index = np.argmax(all_z[0,:N_grid // 2 + 1])
-    for i in range(len(all_x[:,0])):
-        max_x.append(all_x[i,max_index])
-        max_y.append(all_z[i,max_index])
-        max_z.append(all_z[i,max_index])
-
-    with open("He_solv_layer.tmp", "w") as fil:
-        fil.write("# Values of the density of the first solvation layer.\n")
-        fil.write("# Time (ps)  X axis  Y axos  Z axis\n")
-        for i in range(len(t)):
-            fil.write("{} {} {}\n".format(t[i], max_x[i], max_y[i], max_z[i]))
         
-    return t, np.array(max_x), np.array(max_y), np.array(max_z), np.array(t)
+    return t, grid_x, all_x, all_y, all_z
 

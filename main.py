@@ -24,41 +24,18 @@ Eloi Sanchez
 # Function to generate each frame
 def animate(i):
     """
-    Plots each of the animation depending on t
+    Plots each of the animation depending on i
     """
-    # This block controls the plot of the density
-    if ct.is_dens:
-        ax1.clear()
+    # Plot
+    if ct.is_x:
+        plot_x.set_ydata(all_x[i])
+    if ct.is_y:
+        plot_y.set_ydata(all_y[i])
+    if ct.is_z:
+        plot_z.set_ydata(all_z[i])
 
-        # Y axis of the plot
-        ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
-        ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch="condensed",
-                    fontsize=ct.ax_font_size)
-        # X axis of the plot
-        ax1.set_xlim(ct.xrang[0], ct.xrang[1])
-        if not ct.is_deriv:
-            ax1.set_xlabel(ct.x_title, weight=ct.t_bold, stretch="condensed",
-                        fontsize=ct.ax_font_size)
-
-        # for tick in ax1.get_xticklabels():
-        #     tick.set_fontname("Arial")
-        # for tick in ax1.get_yticklabels():
-        #     tick.set_fontname("Arial")
-
-
-        # Plot
-        if ct.is_x:
-            ax1.plot(grid_x, all_x[i], label="x axis", c="#8ece27", lw=ct.lineweight)
-        if ct.is_y:
-            ax1.plot(grid_x, all_y[i], label="y axis", c="#1982c4", lw=ct.lineweight)
-        if ct.is_z:
-            ax1.plot(grid_x, all_z[i], label="z axis", c="#ff333a", lw=ct.lineweight)
-
-        # Title, legend and timestamp
-        ax1.set_title("{}".format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size,
-            stretch="condensed")
-        ax1.legend(frameon=False)
-        ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t[i]), c="grey")
+    # Title, legend and timestamp
+    time_stamp.set_text('{} ps'.format(t[i]))
 
 
 def log(s):
@@ -123,6 +100,23 @@ if ct.showmovie or ct.savemovie:
 
     fig = plt.figure()
     ax1 = fig.add_subplot()
+    
+    if ct.is_x:
+        plot_x = ax1.plot(grid_x, all_x[0], label=r"$x$ axis", c="#8ece27", lw=ct.lineweight)
+    if ct.is_y:
+        plot_y = ax1.plot(grid_x, all_y[0], label=r"$y4 axis", c="#1982c4", lw=ct.lineweight)
+    if ct.is_z:
+        plot_z = ax1.plot(grid_x, all_z[0], label=r"$z$ axis", c="#ff333a", lw=ct.lineweight)
+
+
+    time_stamp = ax1.text(ct.pos_t[0], ct.pos_t[1], "{} ps".format(t[0]), c="grey")
+
+    # Y axis of the plot
+    ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
+    ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch="condensed", \
+                fontsize=ct.ax_font_size)
+    # X axis of the plot
+    ax1.set_xlim(ct.xrang[0], ct.xrang[1])
 
     # This is the function that creates the animation
     animation = FuncAnimation(fig=fig, func=animate, frames=maxnum+1, interval=inter)
