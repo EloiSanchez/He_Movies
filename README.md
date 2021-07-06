@@ -26,6 +26,6 @@ Author: Eloi Sanchez Ambros.
 Contact: esancham21@alumnes.ub.edu or eloisanchez16@gmail.com
 
 ## Other Programs for the Group
-- [Grid Construction](https://github.com/EloiSanchez/Grid_Construction): To generate helium nanodroplet grids of any size and density
+- [Grid Construction](https://github.com/EloiSanchez/Grid_Construction): To generate helium nanodroplet grids of any size and density.
 - [FFT analysis](https://github.com/EloiSanchez/FFT_pob): To perform Fourier analysis of the results of the dynamic simulations of the group.
 
