@@ -27,7 +27,6 @@ def animate(i):
     Plots each of the animation depending on i
     '''
     # Plot
-    print(i)
     if ct.is_x:
         plot_x.set_ydata(all_x[i])
     if ct.is_y:
@@ -114,7 +113,7 @@ if ct.showmovie or ct.savemovie:
     # Plot formatting
     ax1.set_title('{}'.format(ct.graph_title), weight=ct.t_bold, fontsize=ct.tit_font_size, \
             stretch='condensed')
-    ax1.legend(loc='uppper right', frameon=False)
+    ax1.legend(loc='upper right', frameon=False)
     ax1.set_ylim(ct.yrang_dens[0], ct.yrang_dens[1])
     ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch='condensed', \
                 fontsize=ct.ax_font_size)
