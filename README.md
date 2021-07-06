@@ -13,6 +13,8 @@ The results are saved in .mp4 format and may be of significant size if the simul
 ## Usage
 All relevant variables for the plotting must be edited in the ``control.py`` file. This includes the path of the input files, the output name and which graphs are going to be plotted (which axis are going to be used).
 
+The choice of reading den.xx.xxxxxxx.dat or tall.x.xxxxxxxx.dat file formats is given by the user in the input using the variable `is_den = True` for the former and `is_den = False` for the latter.
+
 The results will be automatically saved in ./Resultats/, if the file already exists, it will ask to know if it should be replaced or it should exit the program. While waiting for input, you can manually change the name of the existing file to another one and try again returning any string that is not 'Q' or 'R'.
 
 To execute, use ``python3 main.py``.
