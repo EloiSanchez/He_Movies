@@ -119,6 +119,8 @@ if ct.showmovie or ct.savemovie:
     ax1.set_ylabel(ct.y_title_dens, weight=ct.t_bold, stretch='condensed', \
                 fontsize=ct.ax_font_size)
     ax1.set_xlim(ct.xrang[0], ct.xrang[1])
+    ax1.set_xlabel(ct.x_title, weight=ct.t_bold, stretch='condensed', \
+                fontsize=ct.ax_font_size)
 
     # This is the function that creates the animation
     animation = FuncAnimation(fig=fig, func=animate, frames=maxnum, interval=inter)
