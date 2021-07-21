@@ -19,7 +19,7 @@ lineweight = 1.5
 x_title = r'Axis ($\rm{\AA}$)'
 xrang = (-20, 20)
 
-y_title_dens = r'Helium denisty ($\AA^{-3}$)'
+y_title_dens = r'Helium density ($\AA^{-3}$)'
 y_title_deriv = r'$d\rho/dq$ $(\AA^{-4})$'
 yrang_dens = (0, 0.07)
 yrang_deriv = (-0.07, 0.07)
